@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Game</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 90%;
+      max-width: 500px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .question {
+      font-size: 1.2rem;
+      margin: 20px 0;
+    }
+    .options {
+      display: grid;
+      gap: 15px;
+    }
+    button {
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #66a6ff;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover { background: #4d88ff; }
+    .result {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .correct { background: #4CAF50 !important; }
+    .wrong { background: #f44336 !important; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎮 Fun Quiz Game</h1>
+    <div id="quiz">
+      <div class="question" id="question">Loading question...</div>
+      <div class="options" id="options"></div>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "What is the capital of France?",
+        options: ["Paris", "Rome", "London", "Berlin"],
+        answer: "Paris"
+      },
+      {
+        question: "Which planet is known as the Red Planet?",
+        options: ["Venus", "Mars", "Jupiter", "Saturn"],
+        answer: "Mars"
+      },
+      {
+        question: "Which is the largest ocean on Earth?",
+        options: ["Atlantic", "Pacific", "Indian", "Arctic"],
+        answer: "Pacific"
+      },
+      {
+        question: "What is 7 + 8?",
+        options: ["15", "14", "16", "18"],
+        answer: "15"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const resultEl = document.getElementById("result");
+
+    function loadQuestion() {
+      if (currentQuestion < questions.length) {
+        const q = questions[currentQuestion];
+        questionEl.textContent = q.question;
+        optionsEl.innerHTML = "";
+        q.options.forEach(option => {
+          const btn = document.createElement("button");
+          btn.textContent = option;
+          btn.onclick = () => checkAnswer(btn, option);
+          optionsEl.appendChild(btn);
+        });
+      } else {
+        endQuiz();
+      }
+    }
+
+    function checkAnswer(button, selected) {
+      const correct = questions[currentQuestion].answer;
+      if (selected === correct) {
+        button.classList.add("correct");
+        score++;
+      } else {
+        button.classList.add("wrong");
+      }
+      setTimeout(() => {
+        currentQuestion++;
+        loadQuestion();
+      }, 800);
+    }
+
+    function endQuiz() {
+      questionEl.textContent = "🎉 Quiz Completed!";
+      optionsEl.innerHTML = "";
+      resultEl.textContent = `Your Score: ${score} / ${questions.length}`;
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
